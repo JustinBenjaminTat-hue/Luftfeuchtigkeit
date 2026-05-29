@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lüftungsrechner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px 20px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Lüftungsrechner</h1>
+
+    <div class="card">
+        <h2>Innen</h2>
+        <label>Temperatur (°C)</label>
+        <input id="tin" type="number" step="0.1">
+
+        <label>Luftfeuchtigkeit (%)</label>
+        <input id="rhin" type="number" step="0.1">
+    </div>
+
+    <div class="card">
+        <h2>Außen</h2>
+        <label>Temperatur (°C)</label>
+        <input id="tout" type="number" step="0.1">
+
+        <label>Luftfeuchtigkeit (%)</label>
+        <input id="rhout" type="number" step="0.1">
+    </div>
+
+    <button onclick="calc()">Berechnen</button>
+
+    <div class="card result" id="result"></div>
+
+    <script>
+        function absHumidity(temp, rh) {
+            const sat = 6.112 * Math.exp((17.67 * temp) / (temp + 243.5));
+            return (sat * (rh / 100) * 2.1674) / (273.15 + temp);
+        }
+
+        function calc() {
+            const tin = parseFloat(document.getElementById('tin').value);
+            const rhin = parseFloat(document.getElementById('rhin').value);
+            const tout = parseFloat(document.getElementById('tout').value);
+            const rhout = parseFloat(document.getElementById('rhout').value);
+
+            const inside = absHumidity(tin, rhin);
+            const outside = absHumidity(tout, rhout);
+
+            let recommendation;
+
+            if (outside < inside) {
+                recommendation = "✅ Lüften sinnvoll";
+            } else {
+                recommendation = "❌ Aktuell eher nicht lüften";
+            }
+
+            document.getElementById('result').innerHTML =
+                "Absolute Feuchtigkeit innen: " + inside.toFixed(2) + " g/m³<br>" +
+                "Absolute Feuchtigkeit außen: " + outside.toFixed(2) + " g/m³<br><br>" +
+                "Empfehlung: " + recommendation;
+        }
+    </script>
+
+</body>
+</html>
