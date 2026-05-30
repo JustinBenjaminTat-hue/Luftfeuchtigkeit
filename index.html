@@ -4,37 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lüftungsrechner</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 40px auto;
             padding: 20px;
+            background-color: #2b2b2b;
+            color: white;
         }
 
         .card {
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            background: #3a3a3a;
+            border-radius: 12px;
             padding: 20px;
             margin: 15px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         }
 
         input {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             margin: 8px 0;
             box-sizing: border-box;
+            border: none;
+            border-radius: 8px;
+            background: #555;
+            color: white;
         }
 
         button {
-            padding: 12px 20px;
+            padding: 14px;
             cursor: pointer;
             width: 100%;
+            border: none;
+            border-radius: 8px;
+            background: #666;
+            color: white;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #777;
         }
 
         .result {
             margin-top: 20px;
             font-weight: bold;
+        }
+
+        .info {
+            font-size: 14px;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -64,6 +86,14 @@
 
     <div class="card result" id="result"></div>
 
+    <div class="card info">
+        <h3>Orientierungswerte (absolute Luftfeuchtigkeit innen)</h3>
+        <p>Unter 10 g/m³ → eher trocken</p>
+        <p>10–14 g/m³ → optimal</p>
+        <p>14–17 g/m³ → erhöht</p>
+        <p>Über 17 g/m³ → kritisch (Schimmelrisiko)</p>
+    </div>
+
     <script>
         function absHumidity(temp, rh) {
             const sat = 6.112 * Math.exp((17.67 * temp) / (temp + 243.5));
@@ -79,17 +109,36 @@
             const inside = absHumidity(tin, rhin);
             const outside = absHumidity(tout, rhout);
 
+            let status;
             let recommendation;
+            let diff = outside - inside;
 
-            if (outside < inside) {
-                recommendation = "✅ Lüften sinnvoll";
+            // Innenstatus
+            if (inside < 10) {
+                status = "Eher trocken";
+            } else if (inside <= 14) {
+                status = "Optimal";
+            } else if (inside <= 17) {
+                status = "Erhöht";
             } else {
-                recommendation = "❌ Aktuell eher nicht lüften";
+                status = "Kritisch hoch";
+            }
+
+            // Lüftentscheidung
+            if (outside < inside) {
+                recommendation = "✅ Lüften sinnvoll – draußen ist trockener.";
+            } 
+            else if (diff <= 1.5 && inside > 15) {
+                recommendation = "🟡 Draußen leicht feuchter, aber kurzes Stoßlüften ist noch ok.";
+            } 
+            else {
+                recommendation = "❌ Aktuell eher nicht lüften.";
             }
 
             document.getElementById('result').innerHTML =
                 "Absolute Feuchtigkeit innen: " + inside.toFixed(2) + " g/m³<br>" +
                 "Absolute Feuchtigkeit außen: " + outside.toFixed(2) + " g/m³<br><br>" +
+                "Innenstatus: " + status + "<br><br>" +
                 "Empfehlung: " + recommendation;
         }
     </script>
