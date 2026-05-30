@@ -1,147 +1,152 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lüftungsrechner</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lüftungsrechner</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #2b2b2b;
-            color: white;
-        }
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #2b2b2b;
+    color: white;
+}
 
-        .card {
-            background: #3a3a3a;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-        }
+.card {
+    background: #3a3a3a;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: none;
-            border-radius: 8px;
-            background: #555;
-            color: white;
-        }
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 10px;
+    background: #555;
+    color: white;
+    font-size: 16px;
+}
 
-        button {
-            padding: 14px;
-            cursor: pointer;
-            width: 100%;
-            border: none;
-            border-radius: 8px;
-            background: #666;
-            color: white;
-            font-size: 16px;
-        }
+button {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #777;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
 
-        button:hover {
-            background: #777;
-        }
+button:hover {
+    background: #888;
+}
 
-        .result {
-            margin-top: 20px;
-            font-weight: bold;
-        }
+.result {
+    font-weight: bold;
+    line-height: 1.8;
+}
 
-        .info {
-            font-size: 14px;
-            line-height: 1.6;
-        }
-    </style>
+.info {
+    line-height: 1.8;
+}
+</style>
 </head>
 <body>
 
-    <h1>Lüftungsrechner</h1>
+<h1>Lüftungsrechner</h1>
 
-    <div class="card">
-        <h2>Innen</h2>
-        <label>Temperatur (°C)</label>
-        <input id="tin" type="number" step="0.1">
+<div class="card">
+    <h2>Innen</h2>
+    <label>Temperatur (°C)</label>
+    <input id="tin" type="number" step="0.1">
 
-        <label>Luftfeuchtigkeit (%)</label>
-        <input id="rhin" type="number" step="0.1">
-    </div>
+    <label>Luftfeuchtigkeit (%)</label>
+    <input id="rhin" type="number" step="0.1">
+</div>
 
-    <div class="card">
-        <h2>Außen</h2>
-        <label>Temperatur (°C)</label>
-        <input id="tout" type="number" step="0.1">
+<div class="card">
+    <h2>Außen</h2>
+    <label>Temperatur (°C)</label>
+    <input id="tout" type="number" step="0.1">
 
-        <label>Luftfeuchtigkeit (%)</label>
-        <input id="rhout" type="number" step="0.1">
-    </div>
+    <label>Luftfeuchtigkeit (%)</label>
+    <input id="rhout" type="number" step="0.1">
+</div>
 
-    <button onclick="calc()">Berechnen</button>
+<button onclick="calc()">Berechnen</button>
 
-    <div class="card result" id="result"></div>
+<div class="card result" id="result"></div>
 
-    <div class="card info">
-        <h3>Orientierungswerte (absolute Luftfeuchtigkeit innen)</h3>
-        <p>Unter 10 g/m³ → eher trocken</p>
-        <p>10–14 g/m³ → optimal</p>
-        <p>14–17 g/m³ → erhöht</p>
-        <p>Über 17 g/m³ → kritisch (Schimmelrisiko)</p>
-    </div>
+<div class="card info">
+    <h3>Orientierungswerte</h3>
+    <p>< 8 g/m³ → Zu trocken</p>
+    <p>8–14 g/m³ → Optimal</p>
+    <p>14–17 g/m³ → Leicht erhöht</p>
+    <p>> 17 g/m³ → Kritisch (Schimmelrisiko)</p>
+</div>
 
-    <script>
-        function absHumidity(temp, rh) {
-            const sat = 6.112 * Math.exp((17.67 * temp) / (temp + 243.5));
-            return (sat * (rh / 100) * 2.1674) / (273.15 + temp);
-        }
+<script>
+function absHumidity(temp, rh) {
+    return (6.112 * Math.exp((17.67 * temp) / (temp + 243.5)) * rh * 2.1674) / (273.15 + temp);
+}
 
-        function calc() {
-            const tin = parseFloat(document.getElementById('tin').value);
-            const rhin = parseFloat(document.getElementById('rhin').value);
-            const tout = parseFloat(document.getElementById('tout').value);
-            const rhout = parseFloat(document.getElementById('rhout').value);
+function calc() {
+    const tin = parseFloat(document.getElementById("tin").value);
+    const rhin = parseFloat(document.getElementById("rhin").value);
+    const tout = parseFloat(document.getElementById("tout").value);
+    const rhout = parseFloat(document.getElementById("rhout").value);
 
-            const inside = absHumidity(tin, rhin);
-            const outside = absHumidity(tout, rhout);
+    if (isNaN(tin) || isNaN(rhin) || isNaN(tout) || isNaN(rhout)) {
+        document.getElementById("result").innerHTML = "Bitte alle Werte eingeben.";
+        return;
+    }
 
-            let status;
-            let recommendation;
-            let diff = outside - inside;
+    const inside = absHumidity(tin, rhin);
+    const outside = absHumidity(tout, rhout);
 
-            // Innenstatus
-            if (inside < 10) {
-                status = "Eher trocken";
-            } else if (inside <= 14) {
-                status = "Optimal";
-            } else if (inside <= 17) {
-                status = "Erhöht";
-            } else {
-                status = "Kritisch hoch";
-            }
+    let status;
+    let recommendation;
+    let diff = outside - inside;
 
-            // Lüftentscheidung
-            if (outside < inside) {
-                recommendation = "✅ Lüften sinnvoll – draußen ist trockener.";
-            } 
-            else if (diff <= 1.5 && inside > 15) {
-                recommendation = "🟡 Draußen leicht feuchter, aber kurzes Stoßlüften ist noch ok.";
-            } 
-            else {
-                recommendation = "❌ Aktuell eher nicht lüften.";
-            }
+    // Innenstatus
+    if (inside < 8) {
+        status = "Zu trocken";
+    } else if (inside < 14) {
+        status = "Optimal";
+    } else if (inside < 17) {
+        status = "Leicht erhöht";
+    } else {
+        status = "Kritisch hoch";
+    }
 
-            document.getElementById('result').innerHTML =
-                "Absolute Feuchtigkeit innen: " + inside.toFixed(2) + " g/m³<br>" +
-                "Absolute Feuchtigkeit außen: " + outside.toFixed(2) + " g/m³<br><br>" +
-                "Innenstatus: " + status + "<br><br>" +
-                "Empfehlung: " + recommendation;
-        }
-    </script>
+    // Lüftempfehlung
+    if (outside < inside) {
+        recommendation = "✅ Lüften sinnvoll – draußen trockener";
+    } 
+    else if (diff <= 1.5 && inside > 14) {
+        recommendation = "🟡 Draußen leicht feuchter, kurzes Stoßlüften möglich";
+    } 
+    else {
+        recommendation = "❌ Aktuell eher nicht lüften";
+    }
+
+    document.getElementById("result").innerHTML = `
+        Absolute Feuchtigkeit innen: ${inside.toFixed(2)} g/m³<br>
+        Absolute Feuchtigkeit außen: ${outside.toFixed(2)} g/m³<br><br>
+        Innenstatus: ${status}<br><br>
+        Empfehlung: ${recommendation}
+    `;
+}
+</script>
 
 </body>
 </html>
