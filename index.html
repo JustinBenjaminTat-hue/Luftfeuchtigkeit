@@ -27,12 +27,12 @@ input {
     width: 100%;
     padding: 14px;
     margin: 10px 0;
-    box-sizing: border-box;
     border: none;
     border-radius: 10px;
     background: #555;
     color: white;
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 button {
@@ -115,24 +115,29 @@ function calc() {
 
     let status;
     let recommendation;
-    let diff = outside - inside;
 
     // Innenstatus
     if (inside < 8) {
         status = "Zu trocken";
-    } else if (inside < 14) {
+    } 
+    else if (inside < 14) {
         status = "Optimal";
-    } else if (inside < 17) {
+    } 
+    else if (inside < 17) {
         status = "Leicht erhöht";
-    } else {
+    } 
+    else {
         status = "Kritisch hoch";
     }
 
     // Lüftempfehlung
-    if (outside < inside) {
+    if (outside < inside - 0.2) {
         recommendation = "✅ Lüften sinnvoll – draußen trockener";
     } 
-    else if (diff <= 1.5 && inside > 14) {
+    else if (Math.abs(outside - inside) <= 0.2) {
+        recommendation = "⚪ Neutral – Lüften verändert die Feuchtigkeit kaum";
+    } 
+    else if (outside <= inside + 1.5 && inside > 14) {
         recommendation = "🟡 Draußen leicht feuchter, kurzes Stoßlüften möglich";
     } 
     else {
