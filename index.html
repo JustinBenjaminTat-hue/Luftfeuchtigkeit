@@ -87,11 +87,16 @@ button:hover {
 <div class="card result" id="result"></div>
 
 <div class="card info">
-    <h3>Orientierungswerte</h3>
+    <h3>Orientierungswerte innen</h3>
     <p>< 8 g/m³ → Zu trocken</p>
     <p>8–14 g/m³ → Optimal</p>
-    <p>14–17 g/m³ → Leicht erhöht</p>
-    <p>> 17 g/m³ → Kritisch (Schimmelrisiko)</p>
+    <p>14–17 g/m³ → Erhöht</p>
+    <p>> 17 g/m³ → Kritisch</p>
+
+    <h3>Lüften nach Außenwert</h3>
+    <p>< 14 g/m³ → Gut lüftbar</p>
+    <p>14–16 g/m³ → Kurz lüften</p>
+    <p>> 16 g/m³ → Eher nicht</p>
 </div>
 
 <script>
@@ -124,21 +129,18 @@ function calc() {
         status = "Optimal";
     } 
     else if (inside < 17) {
-        status = "Leicht erhöht";
+        status = "Erhöht";
     } 
     else {
         status = "Kritisch hoch";
     }
 
-    // Lüftempfehlung
-    if (outside < inside - 0.2) {
-        recommendation = "✅ Lüften sinnvoll – draußen trockener";
+    // Lüftlogik nach Außenwert
+    if (outside < 14) {
+        recommendation = "✅ Lüften möglich";
     } 
-    else if (Math.abs(outside - inside) <= 0.2) {
-        recommendation = "⚪ Neutral – Lüften verändert die Feuchtigkeit kaum";
-    } 
-    else if (outside <= inside + 1.5 && inside > 14) {
-        recommendation = "🟡 Draußen leicht feuchter, kurzes Stoßlüften möglich";
+    else if (outside < 16) {
+        recommendation = "🟡 Kurzes Stoßlüften möglich";
     } 
     else {
         recommendation = "❌ Aktuell eher nicht lüften";
