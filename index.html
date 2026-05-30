@@ -89,14 +89,14 @@ button:hover {
 <div class="card info">
     <h3>Orientierungswerte innen</h3>
     <p>< 8 g/m³ → Zu trocken</p>
-    <p>8–14 g/m³ → Optimal</p>
-    <p>14–17 g/m³ → Erhöht</p>
-    <p>> 17 g/m³ → Kritisch</p>
+    <p>8–10 g/m³ → Optimal</p>
+    <p>10–12 g/m³ → Erhöht</p>
+    <p>> 13 g/m³ → Kritisch</p>
 
     <h3>Lüften nach Außenwert</h3>
-    <p>< 14 g/m³ → Gut lüftbar</p>
-    <p>14–16 g/m³ → Kurz lüften</p>
-    <p>> 16 g/m³ → Eher nicht</p>
+    <p>< 10 g/m³ → Gut lüftbar</p>
+    <p>10-12 g/m³ → Kurz lüften</p>
+    <p>> 13 g/m³ → Eher nicht</p>
 </div>
 
 <script>
@@ -125,10 +125,10 @@ function calc() {
     if (inside < 8) {
         status = "Zu trocken";
     } 
-    else if (inside < 14) {
+    else if (inside < 10) {
         status = "Optimal";
     } 
-    else if (inside < 17) {
+    else if (inside < 13) {
         status = "Erhöht";
     } 
     else {
@@ -136,10 +136,10 @@ function calc() {
     }
 
     // Lüftlogik nach Außenwert
-    if (outside < 14) {
+    if (outside < 10) {
         recommendation = "✅ Lüften möglich";
     } 
-    else if (outside < 16) {
+    else if (outside < 12) {
         recommendation = "🟡 Kurzes Stoßlüften möglich";
     } 
     else {
